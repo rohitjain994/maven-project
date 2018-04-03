@@ -53,6 +53,7 @@ pipeline {
                     echo "this was not successful"
                     currentBuild.result = 'FAILURE'
                 } 
+            }
         }
 
         stage('Deploy-to-staging'){
