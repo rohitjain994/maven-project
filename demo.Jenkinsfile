@@ -1,11 +1,32 @@
-node() {
-  git url: 'https://github.com/rohitjain994/maven-project.git'
-  def v = version()
-  if (v) {
-    echo "Building version ${v}"
-  }
-  def mvnHome = tool 'Maven_home'
-  sh "${mvnHome}/bin/mvn -B -Dmaven.test.failure.ignore verify"
-  step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war', fingerprint: true])
-  step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+pipeline {
+    agent any
+    tools {
+        maven 'Maven_home'
+        jdk 'Java_home'
+    }
+    stages{
+        stage('Build'){
+            steps {
+                sh 'mvn clean package'
+            }
+            post {
+                success {
+                    echo 'Now Archiving...'
+                    archiveArtifacts artifacts: '**/target/*.war' , fingerprint: true
+                }
+            }
+        }
+
+        stage('Deploy-to-staging'){
+            steps {
+                sh 'curl -s --upload-file **/target/*.war "http://tomcat:tomcat@http://18.218.67.102:8090/manager/text/deploy?path=/myapp&update=true&tag=${BUILD_TAG}"
+'
+            }
+            post {
+                success {
+                    echo 'Now Deployed...'
+                }
+            }
+        }
+    }
 }
