@@ -4,6 +4,9 @@ pipeline {
         maven 'Maven_home'
         jdk 'Java_home'
     }
+    triggers { 
+        pollSCM('* * * * *') 
+    }
     stages{
         stage('Build'){
             steps {
