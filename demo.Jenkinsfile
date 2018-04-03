@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     tools {
         maven 'Maven_home'
         jdk 'Java_home'
@@ -9,7 +9,6 @@ pipeline {
     }
     stages{
         stage('Build'){
-            agent{lable : 'vdinfra'}
             steps {
                 sh 'mvn clean package'
             }
@@ -22,19 +21,14 @@ pipeline {
         }
 
         stage('Staging Permission') {
-            agent {
-                lable : 'vdinfra'
+            steps{
+                timeout(time:5, unit:'MINUTES') {
+                    input message:'Approve deployment?', submitter: 'it-ops'
+                }
             }
-            timeout(time:5, unit:'MINUTES') {
-                input message:'Approve deployment?', submitter: 'it-ops'
-            }
-            
         }
 
         stage('Deploy-to-staging'){
-            agent{
-                lable : 'vdinfra'
-            }
             steps {
                 sh '''
                 curl -s --upload-file **/target/*.war "http://tomcat:tomcat@18.218.67.102:8090/manager/deploy?path=/webapp&update=true"
