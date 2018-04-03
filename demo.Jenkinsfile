@@ -23,7 +23,7 @@ pipeline {
         stage('Staging Permission') {
             steps{
                 timeout(time:5, unit:'MINUTES') {
-                    input message:'Approve deployment?', submitter: 'it-ops'
+                    input message:'Approve deployment?', submitter: 'admin'
                 }
             }
         }
