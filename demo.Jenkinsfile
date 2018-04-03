@@ -22,7 +22,9 @@ pipeline {
 
         stage('Staging Permission') {
            // timeout(time:15, unit:'SECONDS') {
-                input message:'Approve deployment?'
+                input{
+                     message:'Approve deployment?'
+                }
             
         }
 
