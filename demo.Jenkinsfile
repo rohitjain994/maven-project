@@ -19,7 +19,7 @@ pipeline {
 
         stage('Deploy-to-staging'){
             steps {
-                sh 'curl -s --upload-file **/target/*.war "http://tomcat:tomcat@http://18.218.67.102:8090/manager/text/deploy?path=/myapp&update=true&tag=${BUILD_TAG}"
+                sh 'curl -s --upload-file **/target/*.war "http://tomcat:tomcat@http://18.218.67.102:8090/manager/text/deploy?path=/myapp&update=true&tag=${BUILD_TAG}'
 '
             }
             post {
