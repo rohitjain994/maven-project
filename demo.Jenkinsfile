@@ -22,7 +22,7 @@ pipeline {
 
         stage('Staging Permission') {
             steps{
-                node('Permission'){
+                node{
                     timeout(time:5, unit:'MINUTES') {
                         input message:'Approve deployment?', submitter: 'Vd-infra'
                     }
