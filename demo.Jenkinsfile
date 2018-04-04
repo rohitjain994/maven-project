@@ -9,7 +9,7 @@ pipeline {
     }
     stages{
         stage('Build'){
-            agent { label 'yona' }
+            agent any
             steps {
                 sh 'mvn clean package'
             }
@@ -31,7 +31,7 @@ pipeline {
         }
 
         stage('Deploy-to-staging'){
-            agent { label 'yona' }
+            agent any
             steps {
                 sh '''
                 curl -s --upload-file **/target/*.war "http://tomcat:tomcat@18.218.67.102:8090/manager/deploy?path=/webapp&update=true"
