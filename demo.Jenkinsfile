@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
     tools {
         maven 'Maven_home'
         jdk 'Java_home'
@@ -9,6 +9,7 @@ pipeline {
     }
     stages{
         stage('Build'){
+            agent { label 'yona' }
             steps {
                 sh 'mvn clean package'
             }
@@ -21,16 +22,16 @@ pipeline {
         }
 
         stage('Staging Permission') {
+            agent none
             steps{
-                node{
                     timeout(time:5, unit:'MINUTES') {
-                        input message:'Approve deployment?', submitter: 'Vd-infra'
-                    }
+                    input message:'Approve deployment?', submitter: 'Vd-infra'
                 }
             }
         }
 
         stage('Deploy-to-staging'){
+            agent { label 'yona' }
             steps {
                 sh '''
                 curl -s --upload-file **/target/*.war "http://tomcat:tomcat@18.218.67.102:8090/manager/deploy?path=/webapp&update=true"
