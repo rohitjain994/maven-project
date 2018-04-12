@@ -9,7 +9,9 @@ pipeline {
     }
     stages{
         stage('Build'){
-            agent any
+            agent {
+                
+            }
             steps {
                 sh 'mvn clean package'
             }
